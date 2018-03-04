@@ -883,6 +883,9 @@
                     viewDate = date.clone();
                     input.val(date.format(actualFormat));
                     element.data('date', date.format(actualFormat));
+                    if (options.outerObject != null && options.outerKey !== '') {
+                        options.outerObject[options.outerKey] = date.format(actualFormat);
+                    }
                     unset = false;
                     update();
                     notifyEvent({
@@ -2327,6 +2330,32 @@
             return picker;
         };
 
+        picker.outerObject = function (newOuterObject) {
+            if (arguments.length === 0) {
+                return options.outerObject;
+            }
+
+            if (typeof newOuterObject !== 'object') {
+                throw new TypeError('outerObject() expects a object parameter');
+            }
+
+            options.outerObject = newOuterObject;
+            return picker;
+        };
+
+        picker.outerKey = function (newOuterKey) {
+            if (arguments.length === 0) {
+                return options.outerKey;
+            }
+
+            if (typeof newOuterKey !== 'string') {
+                throw new TypeError('outerKey() expects a string parameter');
+            }
+
+            options.outerKey = newOuterKey;
+            return picker;
+        };
+
         // initializing element and component attributes
         if (element.is('input')) {
             input = element;
@@ -2629,7 +2658,9 @@
         disabledTimeIntervals: false,
         disabledHours: false,
         enabledHours: false,
-        viewDate: false
+        viewDate: false,
+        outerObject: {},
+        outerKey: ''
     };
 
     return $.fn.datetimepicker;
